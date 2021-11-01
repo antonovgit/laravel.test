@@ -1,0 +1,19 @@
+// Здесь два класса: класс ссылки и активной ссылки. В нем используются вложенный конструкции с помощью знака амперсант &. Когда класс активной ссылки добавляется, появляется нижнее подчеркивание синее, а так же сам текст становится синим
+.menu-link {
+    border-bottom: 1px solid transparent;
+    &__active {
+        color: $mainBlue !important;
+        border-bottom: 1px solid $mainBlue;
+    }
+}
+
+
+// .menu-link {
+//     border-bottom: 1px solid transparent;
+//   }
+
+//   .menu-link__active {
+//     color: #2196f3 !important;
+//     border-bottom: 1px solid #2196f3;
+//   }
+

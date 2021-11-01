@@ -1,0 +1,32 @@
+//Т.к. этот файл в формате .scss, здесь будут работать импорт, миксины, переменные, вложенные конструкции и т.д.
+//.scss позволяет разбивать файлы стилей на куски и с помощью импорта подключать их в один единый файл. Подключать импортом так же можно файлы сторонних библиотек, а так же ссылки
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+//bootstrap 5 beta
+//Когда мы запускаем ВебПак с помощью команды "npm run dev", ВебПак будет искать подключаемые файлы в корневой директории, а если не найдет, то сам заглянет в папку node_modules, соответственно не нужно писать такие пути '~./../../../bootstrap/scss/bootstrap'
+@import '~bootstrap/scss/bootstrap';  //D:\OpS\OpenServer\domains\SergeyShmatovskiy\shmatovskiy.test\node_modules\bootstrap\scss\bootstrap.scss
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
+
+//fontawesome-free
+//fontawesome все иконки разбиты на группы. Есть группа брендов, группа регуляр, группа солид и есть основной файл fontawesome, который содержит в себе миксины, переменные, ядро библиотеки. Соответственно если вы хотите подключить какую то одну группу иконок, то обязательно подключайте файл fontawesome, а снизу пишите необходимую вам группу
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/brands";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
+
+
+/// В своей практике, когда я пишу стили для сайта, я сайт разбиваю на отдельные секции и стили каждой секции я выделяю в отдельный файл
+// header
+@import "modules/header";  //D:\OpS\OpenServer\domains\SergeyShmatovskiy\shmatovskiy.test\resources\sass\modules\_header.scss
+
+// hero section
+@import "modules/hero";
+
+// article
+@import "modules/article";
