@@ -33,16 +33,26 @@ class Article extends Model
         return $this->belongsToMany(Tag::class);
     }
 	
+	//Возвращает преобразованное поле Body, а именно: первые 100 символов
 	public function getBodyPreview(){
         return Str::limit($this->body, 100);
     }
 
-    public function createdAtForHumans(){
+    //Возвращает преобразованное поле created_at, т.е. время когда статья была создана
+	//В php есть библиотека Carbon для работы с датой и временем. Она уже встроена в Ларавел и Ларавеловские таймстампы такие как created_at, updated_at и т.д. из коробки уже работают с ф-циями данной библиотеки
+	//diffForHumans - это Кабоновская ф-ция, которая преобразует дату в формат удобный для людей
+	public function createdAtForHumans(){
         return $this->created_at->diffForHumans();
 //        return $this->published_at->diffForHumans();
     }
 
-    public function scopeLastLimit($query, $numbers)
+    //Скопы - позволяют переносить в модель подобные заросы к БД
+	/* //На данный момент этот скоп не является универсальным, т.к. здесь жестко прописан лимит 6 статей
+	public function scopeLastLimit($query)
+    {
+        return $query->with('tags', 'state')->orderBy('created_at', 'desc')->limit(6)->get();
+    }*/
+	public function scopeLastLimit($query, $numbers)
     {
         return $query->with('tags', 'state')->orderBy('created_at', 'desc')->limit($numbers)->get();
     }
