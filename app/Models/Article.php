@@ -57,18 +57,25 @@ class Article extends Model
         return $query->with('tags', 'state')->orderBy('created_at', 'desc')->limit($numbers)->get();
     }
 
-    public function scopeAllPaginate($query, $numbers)
+    //Все статьи в пагинации
+	public function scopeAllPaginate($query, $numbers)
     {
         return $query->with('tags', 'state')->orderBy('created_at', 'desc')->paginate($numbers);
     }
 
-    public function scopeFindBySlug($query, $slug)
+    //Находит статью по слагу. firstOrFail() - находит первую статью или выбрасывается ошибка. Так же статья будет доступна с комментариями, тегами и статистикой
+	public function scopeFindBySlug($query, $slug)
     {
         return $query->with('comments','tags', 'state')->where('slug', $slug)->firstOrFail();
     }
 
+	//На выходе мы получаем статьи в пагинации по 10 штук на страницу, с тегами, со статистикой и в сортировке по created_at по убыванию
     public function scopeFindByTag($query)
     {
         return $query->with('tags', 'state')->orderBy('created_at', 'desc')->paginate(10);
     }
+	/*public function scopeFindByTag($query, $numbers)
+    {
+        return $query->with('tags', 'state')->orderBy('created_at', 'desc')->paginate($numbers);
+    }*/
 }
