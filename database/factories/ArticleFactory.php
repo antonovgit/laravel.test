@@ -37,7 +37,7 @@ class ArticleFactory extends Factory
             'slug' => $slug,
             'img' => 'https://via.placeholder.com/600/5F113B/FFFFFF/?text=LARAVEL:8.*', //ширина 600, 5F113B - цвет фона, FFFFFF - цвет текста, и сам текст text=LARAVEL:8. который накладывается на изображение
             'created_at' => $this->faker->dateTimeBetween('-1 years'),
-//            'published_at' => Carbon::now()
+//            'published_at' => Carbon::now() //заполнит поле published_at датой и веменем на текущий момент
         ];
     }
 }
