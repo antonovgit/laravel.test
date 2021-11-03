@@ -54,10 +54,15 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
+	//!В данном методе описан лимит обращения к сайту в минута. Здесь указано что лимит равен 60 обращениям. Сделано это для того чтобы избежать DOS атак на ваш сайт. Если кол-во обращений по какому-либо роуту превысит указанную здесь цифру, например 61, то ответом от сервера будет 429 ошибка, т.е. превышения лимита обращения к серверу   //429 | TOO MANY REQUESTS //СЛИШКОМ МНОГО ЗАПРОСОВ
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+            //return Limit::perMinute(3);
+			
+			//Если вы полностью доверяете вашим пользователям, то вы можете наисать здесь следующую логику:
+			//return Limit::none(); //Теперь количество попыток доступа неограничено
         });
     }
 }
