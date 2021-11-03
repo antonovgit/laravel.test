@@ -1,36 +1,26 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 //Подключается файл bootstrap
-require('./bootstrap');
+//require('./bootstrap');
+
+window._ = require('lodash');
+window.axios = require('axios');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 
 //Инициализиется новый экземпля Vue
 window.Vue = require('vue').default;
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+//Импортировать store из файла index.js находящийся в папке store. Если файл называется index.js, то вам его прописывать не обязательно, можно ограничиться только директорией
+import store from './store'
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-//Добавляется комонент 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+//Добавляется(регистрирется) комонент. Первый параметр 'article-component' - это имя компонента, второй - путь к файлу данного компонента
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('article-component', require('./components/ArticleComponent.vue').default);
+//Vue.component('views-component', require('./components/ViewsComponent.vue').default);
+//Vue.component('likes-component', require('./components/LikesComponent.vue').default);
+//Vue.component('comments-component', require('./components/CommentsComponent.vue').default);
 
 //const app - это новый экземляр Vue, который привязан к эл с айдишником app
 const app = new Vue({
-    el: '#app',
+    store,	//подключение данного хранилища в новый экземляр Vue
+	el: '#app',
 });
