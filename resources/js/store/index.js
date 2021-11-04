@@ -17,6 +17,7 @@ export default new Vuex.Store({
 			}
 		},
 		slug: '',
+		likeIt: true,
     },
     actions: { //actions - предназначено для выполнения асинхронных запросов к серверу. Здесь мы будем вызывать мутаторы для записи результата API запросов в переменные состояния
 		/*getArticleData(context, payload) { //вызывать экшен getArticleData мы будем в app.js
@@ -34,6 +35,30 @@ export default new Vuex.Store({
 			}).catch(()=>{  //если в процесе обращения к серверу происходит какая-либо ошибка,данная ошибка перехватывается и в консоль выводится слово 'Error'
 				console.log('Error')
 			});
+		},
+		//Делаем put запрос по адресу '/api/article-views-increment' и передаем в качестве параметра слаг. Метод контроллера должен получить слаг, найти нужную страницу синкрементировать счетчик просмотров и передать обратно ресурс страницы но уже с новым значением просмотров. Новые обновленные данные станицы мы присваиваем в переменную article с помощью мутатора SET_ARTICLE.
+		//Тут один инципиальный момент: чтобы инкрементировать просмотры, мы заново возващаем всю статью, делаем казалось бы лишнюю работу. В противовес можно было бы оперировать статьей, лайками и просмотрами по отдельности, но тогда было бы больше запросов к серверу. Поэтому я решил выбрать первый ваиант, когда данные одной статьи, вместе со статистикой и комментариями, формируются на сервере в один единый json объект
+		//setTimeout - это таймер и весь код, который находится внутри запустится через указанное время. Таким обазом лайки синкрементируются через 5 секунд, когда запустится данный экшен. Вызывать его мы будем в хуке created() в файле app.js
+		viewsIncrement(context, payload){
+			setTimeout(() => {
+				axios.put('/api/article-views-increment', {slug:payload }).then((response) =>{
+					//Когда получили ответ от сервера, мы обновляем данные на нашей странице с помощью мутатора SET_ARTICLE
+					context.commit('SET_ARTICLE', response.data.data)
+				}).catch(()=>{
+					console.log('Ошибка')
+				});
+			}, 5000)
+		},
+		//При клике по кнопке мы вызываем экшен, он делат put запрос по адресу '/api/article-likes-increment' и передаем 2 параметра: слаг и increment. После того как метод likesIncrement контроллера ArticleController отработал, мы на выходе получаем новые данные статьи и устанавливаем с помощью мутатора SET_LIKE противоположное значение likeIt
+		//Именно значение переменной likeIt регулирует логику, какой добавить класс стилей и инкрементировать или декрементировать кол-во лайков
+		addLike(context, payload){
+			axios.put('/api/article-likes-increment', {slug:payload.slug, increment:payload.increment }).then((response) =>{
+				context.commit('SET_ARTICLE', response.data.data)
+				context.commit('SET_LIKE', !context.state.likeIt)
+			}).catch(()=>{
+				console.log('Ошибка addLike')
+			});
+			console.log("После клика по кнопке", context.state.likeIt)
 		},
     },
     getters: { //getters использется для вычисляемых свойств
@@ -56,11 +81,14 @@ export default new Vuex.Store({
     },
     mutations: { //mutations - это аналог сеттеров. Здесь будем записывать переменные и новые значения
 		SET_ARTICLE(state, payload) {
-            state.article = payload;
+            return state.article = payload;
         },
 		SET_SLUG(state, payload) {
-            state.slug = payload;
-        }
+            return state.slug = payload;
+        },
+		SET_LIKE(state, payload) {
+			return state.likeIt = payload;
+		},
     }
 })
 

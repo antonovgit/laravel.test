@@ -3,8 +3,8 @@
 <div id="app">
 	<div class="row mt-5">
 		<div class="col-12 pb-3">
-			<? //<article-component></article-component>  ?>
-			<img src="{{$article->img}}" class="border rounded mx-auto d-block" alt="...">
+			<article-component></article-component>
+			{{--<img src="{{$article->img}}" class="border rounded mx-auto d-block" alt="...">
 			<h5 class="mt-5">{{$article->title}}</h5>
 			<p>
 				@foreach ($article->tags as $tag)
@@ -22,7 +22,7 @@
 			<div class="mt-3">
 				<span class="badge bg-primary">{{$article->state->likes}} <i class="far fa-thumbs-up"></i></span>
                 <span class="badge bg-danger">{{$article->state->views}} <i class="far fa-eye"></i></span>
-			</div>
+			</div> --}}
 			
 		</div>
     </div>
