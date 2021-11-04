@@ -18,6 +18,8 @@ export default new Vuex.Store({
 		},
 		slug: '',
 		likeIt: true,
+		commentSuccess: false,
+		errors: [],
     },
     actions: { //actions - предназначено для выполнения асинхронных запросов к серверу. Здесь мы будем вызывать мутаторы для записи результата API запросов в переменные состояния
 		/*getArticleData(context, payload) { //вызывать экшен getArticleData мы будем в app.js
@@ -60,6 +62,17 @@ export default new Vuex.Store({
 			});
 			console.log("После клика по кнопке", context.state.likeIt)
 		},
+		//Делаем ПОСТ запрос по адресу '/api/article-add-comment' передаем в качестве параметров тему, тело комментария и айди статьи. И если метод контроллера отработал успешно, выставляем переменную commentSuccess в противоположное значение с помощью мутатора SET_COMMENT_SUCCESS. Как только это произошло, форма должна исчезнуть и появится сообщение о том, что комментарий успешно отправлен
+		addComment(context, payload){
+			axios.post('/api/article-add-comment', { subject:payload.subject, body:payload.body, article_id:payload.article_id}).then((response) =>{
+				context.commit('SET_COMMENT_SUCCESS', !context.state.commentSuccess)
+				context.dispatch('getArticleData', context.state.slug) //!данная сткочка дергает экшен getArticleData в другом экшене.. соответственно в экшене addComment, и когда комментарий будет добавлен, мы перезаписываем данные артикл и соответственно они уже вернуться с вновь добавленным комментарием
+			}).catch((error)=>{
+				if(error.response.status === 422) {
+					context.state.errors = error.response.data.errors //присваиваем данные из ошибок в массив errors
+				}
+			});
+		}
     },
     getters: { //getters использется для вычисляемых свойств
 		/*articleViews(state) {
@@ -89,6 +102,9 @@ export default new Vuex.Store({
 		SET_LIKE(state, payload) {
 			return state.likeIt = payload;
 		},
+		SET_COMMENT_SUCCESS(state, payload){
+			state.commentSuccess = payload;
+		}
     }
 })
 
