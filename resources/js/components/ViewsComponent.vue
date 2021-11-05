@@ -6,7 +6,8 @@
 export default {
     computed: {
         viewsNumber() {
-            return this.$store.getters.articleViews;
+            //return this.$store.getters.articleViews;
+			return this.$store.getters['article/articleViews']; //с модулем //так можно добаться до геттера конкретного компонента не используя мепгетес
         }
     },
     mounted() {

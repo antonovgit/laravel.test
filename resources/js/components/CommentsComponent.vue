@@ -47,22 +47,36 @@ export default {
     },
     computed: {
         comments() {
-            return this.$store.state.article.comments;
+            //return this.$store.state.article.comments;
+			return this.$store.state.article.article.comments; //с модулем
         },
         //Логика формы привязана к компьютед свойству commentSuccess и оно ссылается на новое свойство нашего стейта, которое так же называется commentSuccess.. в файле D:\OpS\OpenServer\domains\SergeyShmatovskiy\shmatovskiy.test\resources\js\store\index.js
 		commentSuccess(){
-            return this.$store.state.commentSuccess;
+            //return this.$store.state.commentSuccess;
+			return this.$store.state.article.commentSuccess; //с модулем
         },
 		errorsMessage(){
-            return this.$store.state.errors;
+            //return this.$store.state.errors;
+			return this.$store.state.article.errors; //с модулем
         }
     },
     methods: {
         submit_form(){
-            this.$store.dispatch('addComment', {
+            //this.$store.dispatch('addComment', {
+			this.$store.dispatch('article/addComment', {  //с модулем
                 subject: this.subject,
                 body: this.body,
-                article_id : this.$store.state.article.id  //айди статьи к которой относится данный комментарий
+                //article_id : this.$store.state.article.id  //айди статьи к которой относится данный комментарий
+				article_id : this.$store.state.article.article.id  //с модулем
+            })
+        }
+    },
+	methods: {
+        submit_form(){
+            this.$store.dispatch('article/addComment', {
+                subject: this.subject,
+                body: this.body,
+                article_id : this.$store.state.article.article.id
             })
         }
     },

@@ -1,6 +1,7 @@
 //Подключается файл bootstrap
 //require('./bootstrap');
 
+//Пеенесем содежимое файла bootstrap.js сюда
 window._ = require('lodash');
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -35,7 +36,9 @@ const app = new Vue({
         console.log(slug)	//enim-saepe-quidem-et-harum-hic-enim-animi
 		//this.$store.dispatch('getArticleData')
 		this.$store.commit('SET_SLUG', slug )
-		this.$store.dispatch('getArticleData', slug)
-		this.$store.dispatch('viewsIncrement', slug)
+		//this.$store.dispatch('getArticleData', slug)
+		//this.$store.dispatch('viewsIncrement', slug)
+		this.$store.dispatch('article/getArticleData', slug) //здесь уже с именем модуля
+        this.$store.dispatch('article/viewsIncrement', slug)
     }
 });

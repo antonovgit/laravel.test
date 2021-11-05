@@ -28,23 +28,26 @@
 </template>
 
 <script>
+
+//Подключив вспомогательную ф-цию mapState, мы имеем доступ к простанству имен article
+import { mapState }  from 'vuex'
+
 export default {
-    computed:{
+    computed: mapState({
+        // article: 'article',  //Есть более короткий вариант, написать так, то тогда придется использовать префикс .article в нашей разметке:  {{article.article.created_at}}. НО стрелочная ф-ция я считаю более короткий вариант
+        article: state => state.article.article, //стрелочная ф-ция
+        tagsLen: state => state.article.article.tags.length, //стрелочная ф-ция
+    }),
+	/*computed:{
         article(){
-			return this.$store.state.article;
+			//return this.$store.state.article;
+			return this.$state.article.article;
 		},
         tagsLen(){
-			return this.$store.state.article.tags.lenght;
+			//return this.$store.state.article.tags.lenght;
+			return this.$state.article.article.tags.length;
 		},
-		/*//Когда подключаем компонент <views-component></views-component> на страницу, то соответственно нет необходимости использовать computed свойство view()
-		view(){
-			return this.$store.getters.articleViews;
-		},*/
-		/*//Когда подключаем компонент <likes-component></likes-component> на страницу, то соответственно нет необходимости использовать computed свойство likes
-		likes(){
-			return this.$store.getters.articleLikes;
-		},*/
-    },
+    },*/
     mounted() {
         console.log('Component article mounted.')
     }

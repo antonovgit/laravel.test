@@ -2065,6 +2065,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 //
 //
 //
@@ -2094,25 +2095,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//Подключив вспомогательную ф-цию mapState, мы имеем доступ к простанству имен article
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: {
-    article: function article() {
-      return this.$store.state.article;
+  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
+    // article: 'article',  //Есть более короткий вариант, написать так, то тогда придется использовать префикс .article в нашей разметке:  {{article.article.created_at}}. НО стрелочная ф-ция я считаю более короткий вариант
+    article: function article(state) {
+      return state.article.article;
     },
-    tagsLen: function tagsLen() {
-      return this.$store.state.article.tags.lenght;
-    }
-    /*//Когда подключаем компонент <views-component></views-component> на страницу, то соответственно нет необходимости использовать computed свойство view()
-    view(){
-    	return this.$store.getters.articleViews;
-    },*/
+    //стрелочная ф-ция
+    tagsLen: function tagsLen(state) {
+      return state.article.article.tags.length;
+    } //стрелочная ф-ция
 
-    /*//Когда подключаем компонент <likes-component></likes-component> на страницу, то соответственно нет необходимости использовать computed свойство likes
-    likes(){
-    	return this.$store.getters.articleLikes;
-    },*/
+  }),
 
-  },
+  /*computed:{
+         article(){
+  		//return this.$store.state.article;
+  		return this.$state.article.article;
+  	},
+         tagsLen(){
+  		//return this.$store.state.article.tags.lenght;
+  		return this.$state.article.article.tags.length;
+  	},
+     },*/
   mounted: function mounted() {
     console.log('Component article mounted.');
   }
@@ -2131,6 +2138,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+var _data$computed$method;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2169,7 +2180,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_data$computed$method = {
   data: function data() {
     return {
       subject: '',
@@ -2178,30 +2189,43 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     comments: function comments() {
-      return this.$store.state.article.comments;
+      //return this.$store.state.article.comments;
+      return this.$store.state.article.article.comments; //с модулем
     },
     //Логика формы привязана к компьютед свойству commentSuccess и оно ссылается на новое свойство нашего стейта, которое так же называется commentSuccess.. в файле D:\OpS\OpenServer\domains\SergeyShmatovskiy\shmatovskiy.test\resources\js\store\index.js
     commentSuccess: function commentSuccess() {
-      return this.$store.state.commentSuccess;
+      //return this.$store.state.commentSuccess;
+      return this.$store.state.article.commentSuccess; //с модулем
     },
     errorsMessage: function errorsMessage() {
-      return this.$store.state.errors;
+      //return this.$store.state.errors;
+      return this.$store.state.article.errors; //с модулем
     }
   },
   methods: {
     submit_form: function submit_form() {
-      this.$store.dispatch('addComment', {
+      //this.$store.dispatch('addComment', {
+      this.$store.dispatch('article/addComment', {
+        //с модулем
         subject: this.subject,
         body: this.body,
-        article_id: this.$store.state.article.id //айди статьи к которой относится данный комментарий
+        //article_id : this.$store.state.article.id  //айди статьи к которой относится данный комментарий
+        article_id: this.$store.state.article.article.id //с модулем
 
       });
     }
-  },
-  mounted: function mounted() {
-    console.log('Component mounted.');
   }
-});
+}, _defineProperty(_data$computed$method, "methods", {
+  submit_form: function submit_form() {
+    this.$store.dispatch('article/addComment', {
+      subject: this.subject,
+      body: this.body,
+      article_id: this.$store.state.article.article.id
+    });
+  }
+}), _defineProperty(_data$computed$method, "mounted", function mounted() {
+  console.log('Component mounted.');
+}), _data$computed$method);
 
 /***/ }),
 
@@ -2216,22 +2240,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
 //
+//
+//Подключив вспомогательную ф-цию mapGetters, мы имеем возможность воспользоваться всеми геттерами, которые нам надо
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: {
+  computed: _objectSpread({
     isLike: function isLike() {
-      return this.$store.state.likeIt;
-    },
-    likesNumber: function likesNumber() {
-      return this.$store.getters.articleLikes;
+      //return this.$store.state.likeIt;
+      return this.$store.state.article.likeIt; //с модулем
     }
-  },
+  }, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)('article', ['articleLikes'])),
+
+  /*methods: {
+      addLike(){
+          this.$store.dispatch('addLike', {
+              slug : this.$store.state.slug,
+              increment: this.isLike
+          })
+      }
+  },*/
   methods: {
     addLike: function addLike() {
-      this.$store.dispatch('addLike', {
+      this.$store.dispatch('article/addLike', {
         slug: this.$store.state.slug,
         increment: this.isLike
       });
@@ -2262,7 +2303,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   computed: {
     viewsNumber: function viewsNumber() {
-      return this.$store.getters.articleViews;
+      //return this.$store.getters.articleViews;
+      return this.$store.getters['article/articleViews']; //с модулем //так можно добаться до геттера конкретного компонента не используя мепгетес
     }
   },
   mounted: function mounted() {
@@ -2283,6 +2325,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
 //Подключается файл bootstrap
 //require('./bootstrap');
+//Пеенесем содежимое файла bootstrap.js сюда
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'; //Инициализиется новый экземпля Vue
@@ -2313,9 +2356,12 @@ var app = new Vue({
     console.log(slug); //enim-saepe-quidem-et-harum-hic-enim-animi
     //this.$store.dispatch('getArticleData')
 
-    this.$store.commit('SET_SLUG', slug);
-    this.$store.dispatch('getArticleData', slug);
-    this.$store.dispatch('viewsIncrement', slug);
+    this.$store.commit('SET_SLUG', slug); //this.$store.dispatch('getArticleData', slug)
+    //this.$store.dispatch('viewsIncrement', slug)
+
+    this.$store.dispatch('article/getArticleData', slug); //здесь уже с именем модуля
+
+    this.$store.dispatch('article/viewsIncrement', slug);
   }
 });
 
@@ -2332,136 +2378,155 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _modules_article_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/article.js */ "./resources/js/store/modules/article.js");
+
+ //Подключаем модуль article
 
  //Чтобы Vue использовал библиотеку Vuex
 
-vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
+  modules: {
+    //Зарегистрировать новый модуль article
+    article: _modules_article_js__WEBPACK_IMPORTED_MODULE_0__
+  },
   state: {
     //state - это ханилище состояний. Здесь будут храниться все данные, все переменные
-    //article: {},
-    //Другой подход, чтобы избежать ошибок в консоли - это заранее четко прописать структуру объекта state. Можем избавиться в геттеах от if условий
-    article: {
-      comments: [],
-      tags: [],
-      statistic: {
-        likes: 0,
-        views: 0
-      }
-    },
-    slug: '',
-    likeIt: true,
-    commentSuccess: false,
-    errors: []
+    slug: ''
   },
-  actions: {
-    //actions - предназначено для выполнения асинхронных запросов к серверу. Здесь мы будем вызывать мутаторы для записи результата API запросов в переменные состояния
-
-    /*getArticleData(context, payload) { //вызывать экшен getArticleData мы будем в app.js
-    	axios.get('/api/article-json').then((response) =>{
-    		context.commit('SET_ARTICLE', response.data.data)
-    	}).catch(()=>{  //если в процесе обращения к серверу происходит какая-либо ошибка,данная ошибка перехватывается и в консоль выводится слово 'Error'
-    		console.log('Error')
-    	});
-    },*/
-    getArticleData: function getArticleData(context, payload) {
-      //вызывать экшен getArticleData мы будем в app.js
-      console.log("context", context);
-      console.log("payload", payload);
-      axios.get('/api/article-json', {
-        params: {
-          slug: payload
-        }
-      }).then(function (response) {
-        context.commit('SET_ARTICLE', response.data.data);
-      })["catch"](function () {
-        //если в процесе обращения к серверу происходит какая-либо ошибка,данная ошибка перехватывается и в консоль выводится слово 'Error'
-        console.log('Error');
-      });
-    },
-    //Делаем put запрос по адресу '/api/article-views-increment' и передаем в качестве параметра слаг. Метод контроллера должен получить слаг, найти нужную страницу синкрементировать счетчик просмотров и передать обратно ресурс страницы но уже с новым значением просмотров. Новые обновленные данные станицы мы присваиваем в переменную article с помощью мутатора SET_ARTICLE.
-    //Тут один инципиальный момент: чтобы инкрементировать просмотры, мы заново возващаем всю статью, делаем казалось бы лишнюю работу. В противовес можно было бы оперировать статьей, лайками и просмотрами по отдельности, но тогда было бы больше запросов к серверу. Поэтому я решил выбрать первый ваиант, когда данные одной статьи, вместе со статистикой и комментариями, формируются на сервере в один единый json объект
-    //setTimeout - это таймер и весь код, который находится внутри запустится через указанное время. Таким обазом лайки синкрементируются через 5 секунд, когда запустится данный экшен. Вызывать его мы будем в хуке created() в файле app.js
-    viewsIncrement: function viewsIncrement(context, payload) {
-      setTimeout(function () {
-        axios.put('/api/article-views-increment', {
-          slug: payload
-        }).then(function (response) {
-          //Когда получили ответ от сервера, мы обновляем данные на нашей странице с помощью мутатора SET_ARTICLE
-          context.commit('SET_ARTICLE', response.data.data);
-        })["catch"](function () {
-          console.log('Ошибка');
-        });
-      }, 5000);
-    },
-    //При клике по кнопке мы вызываем экшен, он делат put запрос по адресу '/api/article-likes-increment' и передаем 2 параметра: слаг и increment. После того как метод likesIncrement контроллера ArticleController отработал, мы на выходе получаем новые данные статьи и устанавливаем с помощью мутатора SET_LIKE противоположное значение likeIt
-    //Именно значение переменной likeIt регулирует логику, какой добавить класс стилей и инкрементировать или декрементировать кол-во лайков
-    addLike: function addLike(context, payload) {
-      axios.put('/api/article-likes-increment', {
-        slug: payload.slug,
-        increment: payload.increment
-      }).then(function (response) {
-        context.commit('SET_ARTICLE', response.data.data);
-        context.commit('SET_LIKE', !context.state.likeIt);
-      })["catch"](function () {
-        console.log('Ошибка addLike');
-      });
-      console.log("После клика по кнопке", context.state.likeIt);
-    },
-    //Делаем ПОСТ запрос по адресу '/api/article-add-comment' передаем в качестве параметров тему, тело комментария и айди статьи. И если метод контроллера отработал успешно, выставляем переменную commentSuccess в противоположное значение с помощью мутатора SET_COMMENT_SUCCESS. Как только это произошло, форма должна исчезнуть и появится сообщение о том, что комментарий успешно отправлен
-    addComment: function addComment(context, payload) {
-      axios.post('/api/article-add-comment', {
-        subject: payload.subject,
-        body: payload.body,
-        article_id: payload.article_id
-      }).then(function (response) {
-        context.commit('SET_COMMENT_SUCCESS', !context.state.commentSuccess);
-        context.dispatch('getArticleData', context.state.slug); //!данная сткочка дергает экшен getArticleData в другом экшене.. соответственно в экшене addComment, и когда комментарий будет добавлен, мы перезаписываем данные артикл и соответственно они уже вернуться с вновь добавленным комментарием
-      })["catch"](function (error) {
-        if (error.response.status === 422) {
-          context.state.errors = error.response.data.errors; //присваиваем данные из ошибок в массив errors
-        }
-      });
-    }
+  actions: {//actions - предназначено для выполнения асинхронных запросов к серверу. Здесь мы будем вызывать мутаторы для записи результата API запросов в 
   },
   getters: {
     //getters использется для вычисляемых свойств
-
-    /*articleViews(state) {
-    	if(state.article.statistic) {
-    		return state.article.statistic.views;
-    	}
-    },
-    articleLikes(state) {
-    	if(state.article.statistic) {
-    		return state.article.statistic.likes;
-    	}
-    },*/
-    articleViews: function articleViews(state) {
-      return state.article.statistic.views;
-    },
-    articleLikes: function articleLikes(state) {
-      return state.article.statistic.likes;
+    articleSlugRevers: function articleSlugRevers(state) {
+      return state.slug.split('').reverse().join('');
     }
   },
   mutations: {
     //mutations - это аналог сеттеров. Здесь будем записывать переменные и новые значения
-    SET_ARTICLE: function SET_ARTICLE(state, payload) {
-      return state.article = payload;
-    },
     SET_SLUG: function SET_SLUG(state, payload) {
-      return state.slug = payload;
-    },
-    SET_LIKE: function SET_LIKE(state, payload) {
-      return state.likeIt = payload;
-    },
-    SET_COMMENT_SUCCESS: function SET_COMMENT_SUCCESS(state, payload) {
-      state.commentSuccess = payload;
+      state.slug = payload;
     }
   }
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/article.js":
+/*!***********************************************!*\
+  !*** ./resources/js/store/modules/article.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "namespaced": () => (/* binding */ namespaced),
+/* harmony export */   "state": () => (/* binding */ state),
+/* harmony export */   "actions": () => (/* binding */ actions),
+/* harmony export */   "getters": () => (/* binding */ getters),
+/* harmony export */   "mutations": () => (/* binding */ mutations)
+/* harmony export */ });
+//Неймсейс тру - это значит, что мы создаем модулю собственное пространство имен, чтобы изолировать его от других модулей. Основано оно на пути по которому зарегистрированы модули, т.е. в нашем случае пространство имен для данного модуля будет article. Именно так и называется наш файл
+//Если мы создадим в папке modules какую то директорию, допустим app и в нее полижим файл article.js, соответственно пространстро имен у нас будет app/article
+var namespaced = true; //state - это ханилище состояний. Здесь будут храниться все данные, все переменные
+
+var state = {
+  article: {
+    comments: [],
+    tags: [],
+    statistic: {
+      likes: 0,
+      views: 0
+    }
+  },
+  likeIt: true,
+  commentSuccess: false,
+  errors: []
+}; //actions - предназначено для выполнения асинхронных запросов к серверу. Здесь мы будем вызывать мутаторы для записи результата API запросов в переменные состояния
+
+var actions = {
+  // context = {state, commit}
+  getArticleData: function getArticleData(context, payload) {
+    console.log("context", context);
+    console.log("payload", payload); //payload tempora-asperiores-rerum-necessitatibus-sunt
+
+    axios.get('/api/article-json', {
+      params: {
+        slug: payload
+      }
+    }).then(function (response) {
+      context.commit('SET_ARTICLE', response.data.data);
+    })["catch"](function () {
+      console.log('Ошибка');
+    });
+  },
+  viewsIncrement: function viewsIncrement(context, payload) {
+    console.log("rootState.slug", context.rootState.slug); //название переменной
+
+    console.log("rootGetters.articleSlugRevers", context.rootGetters.articleSlugRevers); //название гетера
+
+    setTimeout(function () {
+      axios.put('/api/article-views-increment', {
+        slug: payload
+      }).then(function (response) {
+        context.commit('SET_ARTICLE', response.data.data);
+      })["catch"](function () {
+        console.log('Ошибка');
+      });
+    }, 5000);
+  },
+  addLike: function addLike(context, payload) {
+    axios.put('/api/article-likes-increment', {
+      slug: payload.slug,
+      increment: payload.increment
+    }).then(function (response) {
+      context.commit('SET_ARTICLE', response.data.data);
+      context.commit('SET_LIKE', !state.likeIt);
+    })["catch"](function () {
+      console.log('Ошибка addLike');
+    });
+    console.log("После клика по кнопке", state.likeIt);
+  },
+  addComment: function addComment(context, payload) {
+    axios.post('/api/article-add-comment', {
+      subject: payload.subject,
+      body: payload.body,
+      article_id: payload.article_id
+    }).then(function (response) {
+      //context.commit('SET_COMMENT_SUCCESS', !context.state.commentSuccess) //так было в index.js
+      context.commit('SET_COMMENT_SUCCESS', !state.commentSuccess);
+      context.dispatch('getArticleData', context.rootState.slug); //rootState это объект из index.js..слаг теперь у нас живет в rootState
+    })["catch"](function (error) {
+      if (error.response.status === 422) {
+        context.state.errors = error.response.data.errors;
+      }
+    });
+  }
+}; //getters использется для вычисляемых свойств
+
+var getters = {
+  articleLikes: function articleLikes(state) {
+    return state.article.statistic.likes;
+  },
+  articleViews: function articleViews(state) {
+    return state.article.statistic.views;
+  }
+}; //mutations - это аналог сеттеров. Здесь будем записывать переменные и новые значения
+
+var mutations = {
+  SET_ARTICLE: function SET_ARTICLE(state, payload) {
+    state.article = payload;
+  },
+  SET_LIKE: function SET_LIKE(state, payload) {
+    state.likeIt = payload;
+  },
+  SET_COMMENT_SUCCESS: function SET_COMMENT_SUCCESS(state, payload) {
+    state.commentSuccess = payload;
+  }
+};
 
 /***/ }),
 
@@ -20875,7 +20940,7 @@ var render = function () {
       },
     },
     [
-      _vm._v(_vm._s(_vm.likesNumber) + " "),
+      _vm._v(_vm._s(_vm.articleLikes) + " "),
       _c("i", { staticClass: "far fa-thumbs-up" }),
     ]
   )
